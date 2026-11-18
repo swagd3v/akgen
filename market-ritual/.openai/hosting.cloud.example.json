@@ -1,0 +1,5 @@
+{
+  "project_id": "<sites-project-id>",
+  "d1": { "DB": "market-ritual-db" },
+  "r2": { "BUCKET": "market-ritual-assets" }
+}

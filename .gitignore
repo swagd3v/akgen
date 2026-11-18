@@ -1,0 +1,13 @@
+# Dependencies (reinstall with: npm install)
+node_modules/
+
+# Build output (rebuild with: npm run build)
+dist/
+
+# Too big for GitHub (565 MB, limit is 100 MB)
+ak-studio/CS2_MultiRig_V3.zip
+
+# OneDrive/Windows junk
+Thumbs.db
+desktop.ini
+ak-studio/.git-disabled/

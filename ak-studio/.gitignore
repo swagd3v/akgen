@@ -1,0 +1,20 @@
+dist/
+node_modules/
+__pycache__/
+*.pyc
+*.log
+.env
+.env.*
+!.env.example
+
+# Local source downloads; runnable assets are versioned under assets/.
+/*.glb
+/*.zip
+/animated-aks-74u/
+
+# Browser test outputs; keep test scripts and their small image fixtures.
+/qa/*
+!/qa/*.py
+!/qa/red.png
+!/qa/green.png
+!/qa/alpha.png

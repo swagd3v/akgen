@@ -1,0 +1,21 @@
+#
+# rence.mtl
+#
+
+newmtl models\weapons\v_models\arms\v_
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 0.200000 0.200000 0.200000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ns 0.000000
+map_Kd C:\Users\Daniel i Dawid\Desktop\arms\qc\renceobj/v_model_base_arms_color_00_00_00.bmp
+
+newmtl models\weapons\v_models\arms\t_
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 0.200000 0.200000 0.200000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ns 0.000000
+map_Kd glowe.bmp

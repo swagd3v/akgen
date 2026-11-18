@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f1eb"><title>Pocket Studio &mdash; Phone Image Generator</title><link rel="stylesheet" href="./styles.css"><script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script></head>
+<body>
+<header class="topbar"><a class="brand" href="./"><span class="brand-mark">p<span>&#8599;</span></span>pocket<span class="brand-light">studio</span></a><span class="top-note"><i></i> LOCAL CREATIVE TOOL</span><span class="version">V.01</span></header>
+<main>
+<section class="intro"><div><p class="eyebrow">A LITTLE WORLD, IN YOUR HANDS</p><h1>Make the screen<br>your own<span>.</span></h1></div><p class="intro-copy">Your images. A real 3D grip.<br>Endless combinations, one frame at a time.</p></section>
+<div class="workspace">
+<section class="preview-panel" aria-label="Scene preview"><div class="panel-top"><span><i class="orange-dot"></i> LIVE PREVIEW</span><span>PORTRAIT &middot; 4:5</span></div><div class="canvas-wrap"><canvas id="scene" aria-label="3D hand holding a phone with your image on its screen"></canvas><div id="loading" class="loading">Setting the scene<span>Loading your hand and phone&hellip;</span></div></div><div class="preview-foot"><span id="preview-name">POCKET / 001</span><span>1080 &times; 1350 PX</span></div></section>
+<aside class="controls" aria-label="Generator controls">
+<section class="control-section"><div class="section-title"><span class="step">01</span><h2>Your screen images</h2><span id="image-count" class="count">00</span></div><label class="upload" id="dropzone"><input id="files" type="file" multiple accept="image/png,image/jpeg,image/webp,image/avif,image/gif"><span class="upload-icon">&#8613;</span><strong>Drop images here</strong><span>or <u>browse files</u></span><small>JPG, PNG, WebP & more &middot; up to 20 MB each</small></label><div id="image-list" class="image-list" aria-label="Uploaded screen images"></div><div class="fit-row"><span>Screen sizing</span><div class="segmented" role="group" aria-label="Screen image sizing"><button id="fill" class="active" aria-pressed="true">Fill</button><button id="fit" aria-pressed="false">Fit</button></div></div><p class="micro">Images stay in this tab. Nothing is uploaded.</p></section>
+<section class="control-section"><div class="section-title"><span class="step">02</span><h2>Set the scene</h2></div><div class="field"><label for="background">Background</label><select id="background"></select></div><div class="field"><label for="lighting">Lighting</label><select id="lighting"></select></div><div class="field"><label for="camera">Camera angle</label><select id="camera"></select></div></section>
+<section class="control-section seed-section"><div class="section-title"><span class="step">03</span><h2>Find a combination</h2></div><label class="seed-label" for="seed">SCENE SEED <span>Same seed. Same scene.</span></label><div class="seed-input"><span>#</span><input id="seed" value="pocket-001" maxlength="100" autocomplete="off" spellcheck="false"><button id="apply-seed" title="Apply seed" aria-label="Apply seed">&#8629;</button></div><button id="generate" class="primary" disabled><span>Generate a scene</span><span>&#8599;</span></button><p class="micro">Mix screen images, backgrounds, lights & angles.</p></section>
+<div class="export-section"><button id="download" class="download" disabled><span>&#8595;</span> Download PNG <small>1080 &times; 1350</small></button><button id="reset" class="reset">Reset studio</button><p id="status" role="status" aria-live="polite">Loading 3D assets&hellip;</p></div>
+</aside>
+</div>
+<footer><span>BUILT FOR SMALL EXPERIMENTS & BIG IDEAS.</span><span>RIGGED HAND + MAPPED PHONE / REAL 3D</span></footer>
+</main><script type="module" src="./src/app.js"></script>
+</body></html>
+
