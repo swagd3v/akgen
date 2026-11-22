@@ -7,6 +7,10 @@ dist/
 # Too big for GitHub (565 MB, limit is 100 MB)
 ak-studio/CS2_MultiRig_V3.zip
 
+# Local caches and logs
+.npm-cache/
+*.log
+
 # OneDrive/Windows junk
 Thumbs.db
 desktop.ini

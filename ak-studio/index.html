@@ -1,37 +1,301 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#f3f2ec"><title>AK Studio — Make it yours.</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f3f2ec">
+  <title>AK Studio</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="./styles.css">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 </head>
 <body>
-  <header class="topbar"><a class="brand" href="./"><span class="brand-icon">A<span>↗</span></span>AK<span class="light">STUDIO</span></a><span class="top-tag"><i></i> YOUR OWN ORIGINAL</span><span class="version">LOCAL / V.01</span></header>
+  <header class="topbar">
+    <a class="brand" href="./"><span class="brand-icon">A</span>AK<span class="light">STUDIO</span></a>
+    <nav class="mode-tabs" aria-label="Studio">
+      <button data-mode="weapon" class="active" aria-pressed="true">Weapon skin</button>
+      <button data-mode="phone" aria-pressed="false">Phone scene</button>
+    </nav>
+    <span class="top-tag"><i></i> LOCAL ONLY · NOTHING IS UPLOADED</span>
+  </header>
+
   <main>
-    <section class="intro"><div><p class="eyebrow">LESS SETUP. MORE EXPERIMENTING.</p><h1>A classic silhouette.<br><span>Your signature.</span></h1></div><p class="intro-note">Turn your images into a one-of-a-kind AK skin.<br>Drop them in. Mix things up. Make it yours.</p></section>
     <div class="studio">
-      <section class="stage-panel" aria-label="AK-47 preview">
-        <div class="stage-top"><span class="live"><i></i> LIVE 3D PREVIEW</span><span class="stage-top-note">ANIMATED AKS-74U</span></div>
-        <div class="model-picker"><label for="model">YOUR MODEL</label><select id="model" disabled><option value="aks74u">AKS-74U · Animated</option><option value="ak47">AK-47 · Classic</option><option value="ak47-cs2">AK-47 · CS2</option></select></div>
-        <div class="canvas-wrap"><canvas id="scene" aria-label="Interactive weapon skin preview. Drag to rotate, scroll to zoom, click to select a part."></canvas><div id="loading" class="loading"><strong>Assembling your studio.</strong><span>Loading your animated model and preparing paint areas…</span></div></div>
-        <div class="preview-tools"><div class="camera-tabs" role="group" aria-label="Camera presets"><button data-view="left">Left</button><button data-view="angle" class="active">Angle</button><button data-view="right">Right</button><button data-view="hands">Hands</button></div><button id="reset-view" class="text-button">↺ Reset view</button></div>
-        <div class="stage-foot"><span>↔ DRAG TO ROTATE <b>·</b> SCROLL TO ZOOM</span><span id="selected-label">CLICK A PART TO CUSTOMIZE</span></div>
-        <section class="appearance-panel" aria-label="Hands appearance"><div class="appearance-title"><strong>Hands appearance</strong><span>CS2 MULTIRIG</span></div><div class="appearance-fields"><label>Gloves<select id="glove" disabled></select></label><label>Sleeves<select id="sleeve" disabled></select></label></div><p class="micro">Choose Hands to preview. Original Hands restores the model’s previous look.</p></section>
-        <section id="animation-panel" class="animation-panel" aria-label="Animation controls" hidden><div class="animation-top"><label for="animation-clip">ANIMATION</label><select id="animation-clip" disabled></select><button id="animation-play" disabled>Play</button></div><div class="timeline"><input id="animation-time" type="range" min="0" max="1" step="0.001" value="0" aria-label="Animation time" disabled><span id="animation-label">0.00 / 0.00 s</span></div><p class="micro">Pause or scrub to choose the pose for your render.</p></section>
-        <div class="edition-card"><div><p class="eyebrow">CURRENT EDITION</p><strong id="edition">Original finish</strong><p id="edition-info">A clean slate. Ready for your images.</p></div><div class="edition-badge">AK<br><span>74U</span></div></div>
-        <div class="workflow"><span><b>01</b> Add your images</span><i>→</i><span><b>02</b> Find a combination</span><i>→</i><span><b>03</b> Keep your favorite</span></div>
-        <details id="parts-panel" class="parts-panel"><summary><span>Customize parts</span><span class="summary-note">OPTIONAL <b>+</b></span></summary><div class="parts-content"><p class="hint">Lock the parts you love. Generate changes everything else.</p><div id="part-list" class="part-list"></div><div id="part-editor" hidden><div class="part-heading"><h3 id="part-title">Body</h3><label class="lock-label"><input id="part-lock" type="checkbox"> Lock this part</label></div><p class="hint">Use all images, or pick a smaller set for this part.</p><div id="part-images" class="part-images"></div><div class="part-actions"><button id="part-all">Use all images</button><button id="part-generate">Regenerate part</button><button id="part-original">Original finish</button></div></div></div></details>
-      </section>
-      <aside class="controls" aria-label="Skin controls">
-        <section class="control-section"><div class="section-title"><span class="step">01</span><h2>Your image collection</h2><span id="image-count" class="count">00</span></div><label id="dropzone" class="dropzone"><input id="files" type="file" accept="image/*" multiple><span class="upload-icon">↥</span><strong>Drop your images here</strong><span>or <u>browse files</u></span><small>JPG, PNG, WebP · up to 20 MB each</small></label><div id="images" class="image-list" aria-label="Uploaded images"></div><p class="micro">Local only. Your images stay in this tab.</p></section>
-        <section class="control-section"><div class="section-title"><span class="step">02</span><h2>Make a collage</h2></div><label class="field-label" for="density">How much artwork?</label><div class="density-tabs" role="group" aria-label="Collage density"><button data-density="sparse">Sparse</button><button data-density="medium" class="active">Balanced</button><button data-density="dense">Layered</button></div><p id="density-hint" class="hint">A mix of artwork and the original finish.</p><label class="seed-label" for="seed">EDITION SEED <span>Revisit a favorite.</span></label><div class="seed-box"><span>#</span><input id="seed" value="edition-001" autocomplete="off" spellcheck="false" maxlength="100"><button id="apply-seed" aria-label="Apply seed" title="Apply seed" disabled>↵</button></div><button id="generate" class="primary" disabled><span>Generate a skin</span><span>↗</span></button><p class="micro centered">A new mix of images, placement & rotation.</p></section>
-        <section class="control-section export-section"><div class="section-title"><span class="step">03</span><h2>Take it with you</h2></div><button id="download-render" class="download" disabled><span>↓</span> Download render <small>1920 × 1080</small></button><button id="download-texture" class="download secondary" disabled><span>▧</span> Download texture <small>2048 × 2048</small></button><button id="download-model" class="download secondary" disabled>Download GLB <small>MODEL + SKIN</small></button><p class="micro">The prepared texture atlas matches the downloaded GLB.</p><button id="reset" class="reset">Reset studio</button><p id="status" role="status" aria-live="polite">Loading the studio…</p></section>
+      <div class="stage-column">
+
+        <!-- Weapon studio -->
+        <section id="weapon-stage" class="stage-panel" aria-label="Weapon preview">
+          <div class="stage-top">
+            <span class="live"><i></i> LIVE 3D PREVIEW</span>
+            <div class="model-picker">
+              <label for="model">MODEL</label>
+              <select id="model" disabled>
+                <option value="aks74u">AKS-74U · Animated</option>
+                <option value="ak47">AK-47 · Classic · Animated</option>
+                <option value="awp">AWP</option>
+                <option value="ak47-cs2">AK-47 · CS2</option>
+              </select>
+            </div>
+          </div>
+          <div class="canvas-wrap landscape">
+            <canvas id="scene" aria-label="Interactive weapon skin preview. Drag to rotate, scroll to zoom, click to select a part."></canvas>
+            <div id="loading" class="loading"><strong>Assembling your studio.</strong><span>Loading the model and preparing paint areas…</span></div>
+          </div>
+          <div class="preview-tools">
+            <div class="segmented" role="group" aria-label="Camera presets">
+              <button data-view="left">Left</button>
+              <button data-view="angle" class="active">Angle</button>
+              <button data-view="right">Right</button>
+              <button data-view="hands">Hands</button>
+            </div>
+            <span id="view-hint" class="micro">Drag to rotate · scroll to zoom · click a part to edit it</span>
+            <button id="reset-view" class="text-button">↺ Reset view</button>
+          </div>
+
+          <div class="edition-card">
+            <div>
+              <p class="eyebrow">CURRENT EDITION</p>
+              <strong id="edition">Factory finish</strong>
+              <p id="edition-info">Add images to paint this weapon.</p>
+            </div>
+            <span id="model-tag" class="edition-badge"></span>
+          </div>
+
+          <details id="parts-panel" class="panel">
+            <summary><span>Customize parts</span><span id="selected-label" class="summary-note">CLICK A PART ON THE MODEL</span></summary>
+            <div class="panel-content">
+              <p class="hint">Parts share one continuous design. Give a part a solid colour, its own images, or lock it so Generate leaves it alone.</p>
+              <div id="part-list" class="chip-list"></div>
+              <div id="part-editor" hidden>
+                <div class="part-heading">
+                  <h3 id="part-title">Body</h3>
+                  <label class="check-label"><input id="part-lock" type="checkbox"> Lock this part</label>
+                </div>
+                <div class="segmented wide" role="group" aria-label="Part finish">
+                  <button data-part-mode="art">Artwork</button>
+                  <button data-part-mode="solid">Solid colour</button>
+                  <button data-part-mode="original">Factory finish</button>
+                </div>
+                <div id="part-solid" class="swatch-row" role="group" aria-label="Solid colour" hidden></div>
+                <div id="part-art">
+                  <p class="hint">Untick images to keep them off this part.</p>
+                  <div id="part-images" class="part-images"></div>
+                  <div class="button-row">
+                    <button id="part-all" class="ghost">Use all images</button>
+                    <button id="part-generate" class="ghost">Remix this part</button>
+                    <button id="part-rejoin" class="ghost">Rejoin shared design</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details id="pose-panel" class="panel">
+            <summary><span>Hands &amp; animation</span><span class="summary-note">POSE FOR YOUR RENDER</span></summary>
+            <div class="panel-content">
+              <div class="field-pair">
+                <label>Gloves<select id="glove" disabled></select></label>
+                <label>Sleeves<select id="sleeve" disabled></select></label>
+              </div>
+              <p id="hands-note" class="micro">Choose the Hands view to see them.</p>
+              <div id="animation-panel" class="animation" hidden>
+                <div class="animation-top">
+                  <label for="animation-clip">Animation</label>
+                  <select id="animation-clip" disabled></select>
+                  <button id="animation-play" class="ghost" disabled>Play</button>
+                </div>
+                <div class="timeline">
+                  <input id="animation-time" type="range" min="0" max="1" step="0.001" value="0" aria-label="Animation time" disabled>
+                  <span id="animation-label">0.00 / 0.00 s</span>
+                </div>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <!-- Phone studio -->
+        <section id="phone-stage" class="stage-panel" aria-label="Phone scene preview" hidden>
+          <div class="stage-top">
+            <span class="live"><i></i> LIVE · SCROLL OR DRAG TO MOVE THE FEED</span>
+            <span id="phone-format-note" class="stage-top-note">16:9</span>
+          </div>
+          <div id="phone-wrap" class="canvas-wrap landscape">
+            <canvas id="phone-scene" aria-label="First-person view of a hand holding a phone that shows your feed"></canvas>
+            <div id="phone-loading" class="loading"><strong>Setting the scene.</strong><span>Loading the hand and phone…</span></div>
+          </div>
+          <div class="preview-tools"><span id="phone-name" class="micro">POCKET / 001</span><span id="phone-size" class="micro">1920 × 1080 PX</span></div>
+        </section>
+      </div>
+
+      <aside class="controls" aria-label="Controls">
+        <section id="library-section" class="control-section">
+          <div class="section-title"><span class="step">01</span><h2>Your images</h2><span id="image-count" class="count">00</span></div>
+          <label id="dropzone" class="dropzone">
+            <input id="files" type="file" accept="image/*" multiple>
+            <strong>Drop images here</strong><span>or <u>browse files</u></span>
+            <small>JPG, PNG, WebP · up to 20 MB each</small>
+          </label>
+          <div id="images" class="image-list" aria-label="Uploaded images"></div>
+          <p id="library-status" class="micro" role="status" aria-live="polite"></p>
+        </section>
+
+        <!-- Weapon controls -->
+        <div id="weapon-controls">
+          <section class="control-section">
+            <div class="section-title"><span class="step">02</span><h2>Design the skin</h2></div>
+
+            <label class="field-label">Layout</label>
+            <div id="styles" class="segmented grid" role="group" aria-label="Layout style"></div>
+            <p id="style-hint" class="hint"></p>
+            <div id="text-field" hidden>
+              <label class="field-label" for="stencil-text">Stencil word <span>Up to 24 characters.</span></label>
+              <div class="seed-box"><input id="stencil-text" maxlength="24" autocomplete="off" spellcheck="false" placeholder="AK-47"></div>
+            </div>
+
+            <label class="field-label">Image size</label>
+            <div class="segmented wide" role="group" aria-label="Image size">
+              <button data-scale="bold">Bold</button>
+              <button data-scale="balanced">Balanced</button>
+              <button data-scale="busy">Busy</button>
+            </div>
+
+            <label class="field-label">Colour</label>
+            <div id="treatments" class="segmented grid" role="group" aria-label="Colour treatment"></div>
+            <p id="treatment-hint" class="hint"></p>
+
+            <label class="field-label" for="palette">Palette</label>
+            <div class="palette-row">
+              <select id="palette"></select>
+              <div id="swatches" class="swatch-row" role="group" aria-label="Palette colours"></div>
+            </div>
+
+            <div class="field-pair">
+              <label>Base coat<select id="base-coat"></select></label>
+              <label>Surface<select id="finish"></select></label>
+            </div>
+
+            <label class="field-label">Finishing touches</label>
+            <div id="touches" class="segmented wide" role="group" aria-label="Finishing touches"></div>
+            <p id="touch-hint" class="hint"></p>
+
+            <label class="field-label" for="seed">Edition seed <span>Same seed, same skin.</span></label>
+            <div class="seed-box">
+              <span>#</span>
+              <input id="seed" value="edition-001" autocomplete="off" spellcheck="false" maxlength="100">
+              <button id="apply-seed" aria-label="Apply seed" title="Apply seed" disabled>↵</button>
+            </div>
+            <button id="generate" class="primary" disabled><span>Generate a new layout</span><span>↗</span></button>
+            <button id="surprise" class="secondary" disabled>Surprise me · new layout, colours and style</button>
+          </section>
+
+          <section class="control-section">
+            <div class="section-title"><span class="step">03</span><h2>Add stickers</h2><span id="sticker-count-badge" class="count">00</span></div>
+            <p class="hint">Stickers go on top of the finished skin and use their own images. Cut-out PNGs keep their shape.</p>
+            <label id="sticker-dropzone" class="dropzone compact">
+              <input id="sticker-files" type="file" accept="image/*" multiple>
+              <strong>Drop sticker images here</strong><span>or <u>browse files</u></span>
+            </label>
+            <div id="sticker-images" class="image-list" aria-label="Sticker images"></div>
+            <p id="sticker-status" class="micro" role="status" aria-live="polite"></p>
+
+            <label class="field-label">Effect</label>
+            <div id="sticker-effects" class="segmented grid" role="group" aria-label="Sticker effect"></div>
+            <p id="sticker-hint" class="hint"></p>
+
+            <label class="field-label">Size</label>
+            <div id="sticker-sizes" class="segmented wide" role="group" aria-label="Sticker size"></div>
+
+            <label class="field-label" for="sticker-count">How many <span id="sticker-count-label">4 stickers</span></label>
+            <input id="sticker-count" type="range" min="1" max="12" step="1" value="4" disabled>
+
+            <div class="button-row">
+              <button id="sticker-shuffle" class="ghost" disabled>Move the stickers</button>
+              <button id="sticker-clear" class="ghost" disabled>Remove all stickers</button>
+            </div>
+          </section>
+
+          <section class="control-section">
+            <div class="section-title"><span class="step">04</span><h2>Take it with you</h2></div>
+            <button id="download-render" class="download" disabled>Download render <small>1920 × 1080</small></button>
+            <button id="download-texture" class="download" disabled>Download texture <small>2048 × 2048</small></button>
+            <button id="download-model" class="download" disabled>Download GLB <small>MODEL + SKIN</small></button>
+            <button id="reset" class="reset">Reset weapon studio</button>
+            <p id="status" class="status" role="status" aria-live="polite">Loading the studio…</p>
+          </section>
+        </div>
+
+        <!-- Phone controls -->
+        <div id="phone-controls" hidden>
+          <section class="control-section">
+            <div class="section-title"><span class="step">01</span><h2>Your posts</h2><span id="phone-count" class="count">00</span></div>
+            <p class="hint">Add screenshots of posts. They are stacked into one endless feed on the phone, in the order you add them.</p>
+            <label id="phone-dropzone" class="dropzone">
+              <input id="phone-files" type="file" accept="image/*" multiple>
+              <strong>Drop post screenshots here</strong><span>or <u>browse files</u></span>
+              <small>JPG, PNG, WebP · up to 20 MB each</small>
+            </label>
+            <div id="phone-posts" class="image-list" aria-label="Feed posts"></div>
+            <p id="phone-library-status" class="micro" role="status" aria-live="polite"></p>
+            <div class="button-row">
+              <button id="phone-use-weapon" class="ghost" disabled>Post my weapon render</button>
+              <button id="phone-shuffle" class="ghost" disabled>Shuffle the feed</button>
+              <button id="phone-clear" class="ghost" disabled>Remove all posts</button>
+            </div>
+            <label class="field-label">App bars <span>Off for full-screen screenshots.</span></label>
+            <div class="segmented wide" role="group" aria-label="App bars">
+              <button data-phone-bars="on">On</button>
+              <button data-phone-bars="off">Off</button>
+            </div>
+          </section>
+
+          <section class="control-section">
+            <div class="section-title"><span class="step">02</span><h2>Set the scene</h2></div>
+            <div class="field-stack">
+              <label>World<select id="phone-environment"></select></label>
+              <label>How the phone is held<select id="phone-hold"></select></label>
+              <label>Frame<select id="phone-format"></select></label>
+            </div>
+            <label class="field-label">Game overlay</label>
+            <div class="segmented wide" role="group" aria-label="Game overlay">
+              <button data-phone-hud="on">On</button>
+              <button data-phone-hud="off">Off</button>
+            </div>
+            <label class="field-label" for="phone-seed">Scene seed <span>Same seed, same scene.</span></label>
+            <div class="seed-box">
+              <span>#</span>
+              <input id="phone-seed" value="pocket-001" maxlength="100" autocomplete="off" spellcheck="false">
+              <button id="phone-apply-seed" title="Apply seed" aria-label="Apply seed" disabled>↵</button>
+            </div>
+            <button id="phone-generate" class="primary" disabled><span>Generate a scene</span><span>↗</span></button>
+          </section>
+
+          <section class="control-section">
+            <div class="section-title"><span class="step">03</span><h2>Use it live</h2></div>
+            <p class="hint">Scroll the mouse wheel or drag over the view to move the feed. Move the mouse to look around.</p>
+            <label class="field-label">Auto-scroll</label>
+            <div class="segmented wide" role="group" aria-label="Auto-scroll">
+              <button data-phone-auto="off">Off</button>
+              <button data-phone-auto="slow">Slow</button>
+              <button data-phone-auto="normal">Normal</button>
+              <button data-phone-auto="fast">Fast</button>
+            </div>
+            <div class="button-row" style="margin-top: 12px">
+              <button id="phone-fullscreen" class="secondary" disabled>Go full screen</button>
+              <button id="phone-record" class="secondary" disabled>Record video</button>
+            </div>
+            <p class="hint">In full screen: Space turns auto-scroll on and off, the arrow keys scroll, Esc leaves.</p>
+          </section>
+
+          <section class="control-section">
+            <div class="section-title"><span class="step">04</span><h2>Take it with you</h2></div>
+            <button id="phone-download" class="download" disabled>Download PNG <small id="phone-download-size">1920 × 1080</small></button>
+            <button id="phone-reset" class="reset">Reset phone scene</button>
+            <p id="phone-status" class="status" role="status" aria-live="polite">Open this tab to load the scene.</p>
+          </section>
+        </div>
       </aside>
     </div>
-    <footer><span>SMALL EXPERIMENTS. DISTINCTIVE RESULTS.</span><span>INSPIRED BY SKINGEN / MADE FOR MAKING</span></footer>
   </main>
-  <script type="module" src="./src/app.js"></script>
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>

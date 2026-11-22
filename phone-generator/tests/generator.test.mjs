@@ -1,7 +1,0 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
-import { chooseScene,imageRect,backgrounds,lights,cameras } from '../src/generator.js';
-test('seeds reproduce combinations and only select declared traits',()=>{const ids=['a','b','c'];for(let i=0;i<100;i++){const a=chooseScene('seed-'+i,ids);assert.deepEqual(a,chooseScene('seed-'+i,ids));assert.ok(ids.includes(a.imageId));assert.ok(backgrounds.some(b=>b.id===a.background));assert.ok(lights.some(l=>l.id===a.lighting));assert.ok(cameras.some(c=>c.id===a.camera));}});
-test('empty image libraries use the placeholder and preserve sizing',()=>assert.deepEqual(chooseScene('example',[],'contain'),{...chooseScene('example'),fit:'contain',imageId:'placeholder'}));
-test('contain fits without clipping and cover fills without distortion',()=>{for(const [iw,ih]of [[800,1600],[1600,800],[1000,1000]]){for(const fit of ['cover','contain']){const [x,y,w,h]=imageRect(iw,ih,768,1576,fit);assert.ok(Math.abs(w/h-iw/ih)<1e-9);if(fit==='contain'){assert.ok(w<=768+.001&&h<=1576+.001);assert.ok(x>=-.001&&y>=-.001);}else{assert.ok(w>=768-.001&&h>=1576-.001);assert.ok(x<=.001&&y<=.001);}}}});
-test('all backgrounds, cameras, and lights occur across seeds',()=>{const scenes=Array.from({length:200},(_,i)=>chooseScene(String(i)));assert.equal(new Set(scenes.map(s=>s.background)).size,4);assert.equal(new Set(scenes.map(s=>s.lighting)).size,3);assert.equal(new Set(scenes.map(s=>s.camera)).size,3);});

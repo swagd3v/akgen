@@ -1,1 +1,14 @@
-{"name":"ak-studio","version":"1.0.0","private":true,"type":"module","scripts":{"start":"node scripts/serve.mjs --open","dev":"node scripts/serve.mjs","build":"node scripts/build.mjs","test":"node --test tests/generator.test.mjs"}}
+{
+  "name": "ak-studio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.mjs --open",
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "rig": "node scripts/extract-cs2-rig.mjs",
+    "awp": "node scripts/convert-awp.mjs",
+    "test": "node --test tests/"
+  }
+}

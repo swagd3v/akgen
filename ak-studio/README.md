@@ -1,121 +1,189 @@
 # AK Studio
 
-A standalone local skin generator for your animated AKS-74U, Classic AK-47, and CS2 AK-47, inspired by skingen. Pocket Studio, the source FBX/GLB uploads, and the original skingen checkout are unchanged.
+A local, browser-based studio with two tools:
+
+- **Weapon skin** turns your images into a skin for an animated AKS-74U, an animated seven-part classic AK-47, a CS2 AK-47 or an AWP, and exports renders, the texture and a GLB.
+- **Phone scene** stacks your post screenshots into a scrolling feed on a phone held in a rigged hand, seen in first person like a game viewmodel. Scroll it live, record it, or download stills.
+
+Nothing is uploaded. Images stay in the tab's memory and are gone on refresh.
 
 ## Launch
 
-Double-click **Start AK Studio.cmd** and keep its terminal open. The launcher finds Node.js through PATH or standard Windows installation folders and opens your browser after the server starts.
-
-Or run from this directory:
+Double-click **Start AK Studio.cmd**, or from this folder:
 
 ```
 npm start
 ```
 
-Open **http://127.0.0.1:4318**. Node.js 20 or newer is required. No npm install, API key, account, CDN, or network connection is needed. `npm run dev` serves without opening a browser. Set PORT to change the port.
+Then open **http://127.0.0.1:4318**. Node.js 20 or newer is the only requirement: no `npm install`, account, CDN or network. `npm run dev` serves without opening a browser; set `PORT` to change the port.
 
-The repository includes the ready-to-use models in `assets/`. Original ZIP/FBX downloads, duplicate source GLBs, generated QA screenshots/exports, and `dist/` stay local. Cloning the repository is sufficient to run the app; the original MultiRig ZIP is only needed to rebuild its curated assets with `scripts/prepare-cs2.py`.
+## Making a skin that holds together
 
-## Models and views
+Drop images into **Your images**. The weapon is painted straight away and repaints whenever you change a control.
 
-The model selector defaults to **AKS-74U - Animated**. Its original rig, skin weights, hand textures, normal maps, material-detail maps, and seven clips are retained. Choose **AK-47 - Classic** for the previous model and its seven-part editor.
+The artwork is composed on the weapon's **left and right side profiles** and then projected onto the model, so each image lands whole and runs straight across part boundaries (rather than being cut up along the UV layout). Text reads correctly on both sides. Top, bottom and end faces continue the artwork "over the edge" of the profile.
 
-Choose **AK-47 · CS2** for your uploaded CS2 weapon. It retains its original textured finish, UV layout, skeleton, and skin weights. Its five exposed clips are Idle, Draw, Reload, Fire, and Inspect. Idle is a stationary pose, so Play and the timeline are disabled for it. This file contains weapon bones but no arms or finger bones: Hands and glove/sleeve controls are unavailable for this model. Both existing models retain their hand options.
+| Control | What it does |
+| --- | --- |
+| **Layout** | Ten ways to arrange the images, listed below. |
+| **Image size** | Bold, Balanced or Busy. Sizes are relative to the weapon's body, so they behave the same on every model. |
+| **Colour** | *Original* leaves images alone. *Matched* pulls brightness, contrast, saturation and colour cast together. *Duotone* recolours every image with the palette, the strongest way to unify unrelated pictures. *Halftone* redraws them as comic-print dots in palette colours, which also hides differences in photo quality. *Poster* flattens them to the four palette colours. |
+| **Palette** | *Auto* extracts four colours (dark, main, light, accent) from your images. Or pick a preset, or click a swatch to make your own. The palette drives the colour treatments, the base coat, dividers, stripes, outlines and solid parts. |
+| **Base coat** | The paint under the artwork wherever images do not reach. *Factory finish* leaves the original surface showing. |
+| **Surface** | Auto (a neutral paint finish), Matte, Satin or Gloss. Only painted parts change; unpainted parts keep their factory metal and wood. |
+| **Finishing touches** | Optional passes over any layout. *Fade* dissolves the artwork into the base coat toward the muzzle and stock. *Stripes* adds racing stripes along the weapon. *Edge wear* scuffs the paint back to the factory finish along hard edges. |
+| **Edition seed** | The same seed, images and settings always give the same skin. *Generate a new layout* rolls a new seed. *Surprise me* also rolls the layout, size, colour and palette. |
 
-The CS2 weapon has one **Weapon** paint group. Upload images and generate artwork as usual; the paint uses a nonmetallic, roughness-0.75 finish for clearer images while retaining normal and occlusion detail. Restore the original finish in Customize parts to recover its supplied color texture and original material. The model has its own workspace, and images remain shared across all three models.
+The layouts:
 
-All models support Left, Angle, and Right views. AKS-74U and Classic also support Hands. Drag to rotate and scroll to zoom in studio views. Hands uses a fixed first-person camera. Reset View restores the current preset.
+| Layout | |
+| --- | --- |
+| **Collage** | Overlapping images cover the weapon. |
+| **Panels** | Angled bands, one image each, with accent dividers. |
+| **Camo** | Camouflage blobs, each cut from a different image or filled with a palette colour. |
+| **Stencil** | A word you type, set large along the weapon, with the images showing through the letters. |
+| **Hero** | One image shown whole on the receiver; the rest is base coat and pinstripes. |
+| **Split** | Artwork toward the muzzle, a solid colour behind, divided by a diagonal with an accent stripe. |
+| **Filmstrip** | Rows of film frames with sprocket holes, one image per frame. |
+| **Slices** | One image cut into vertical strips that slip up and down. |
+| **Hex** | A honeycomb of cells, each holding a different image. |
+| **Pattern** | One image mirrored and repeated end to end. |
 
-In **Hands appearance**, choose Hard-Knuckle, Black Hard-Knuckle, Fingerless, or Full-Finger gloves, with Bare Arms, FBI, SAS, or Balkan sleeves. Hard-Knuckle with FBI sleeves is the default. Assets load when needed; each model remembers its own choices for the current tab. **Original Hands** restores the animated model's native arms or Classic's original POV grip. If an appearance fails to load, the last working selection remains available.
+Hero, Slices and Pattern use a single image, picked by the seed; untick images on the parts panel, or generate again, to get a different one.
 
-The CS2 hands follow each weapon's existing grip. On the AKS-74U they follow its seven native animation clips, including reloads. The CS2 pack's unrelated inspect animations are not used. Switching hand appearances does not change your gun artwork. These are curated textured presets from MultiRig; Blender's procedural skin controls are not included in the browser.
+Quick recipe for a coherent skin from mismatched images: **Duotone**, then try palettes; or **Panels**; or keep **Collage** and give the stock, grip or magazine a solid palette colour (below).
 
-Uploaded images are shared between models. Each model retains its own seed, density, part settings, composed skin, view, and selected animation frame for the current tab. Switching models pauses playback. Refreshing discards session edits. Reset Studio clears the image collection and skin-edit workspaces and returns the active animated model to Fire single at frame zero.
+### Stickers
 
-## Animation controls
+**Add stickers** is a separate step after the skin: it has its own images, and the stickers are laid over whatever the weapon is wearing (artwork, solid colours, edge wear or the bare factory finish). Changing or regenerating the skin leaves them where they are. Cut-out PNGs keep their shape and get a die-cut edge.
 
-The AKS-74U includes all seven supplied clips: Reload t, Reload f, Fire single, Fire mode select, Fire sprite, Put in, and Put out. Labels reflect the source file's names.
+| Effect | |
+| --- | --- |
+| **Paper** | The image as it is, with a white edge. |
+| **Gold** | The image struck in polished gold. |
+| **Holo** | A rainbow holographic film over the image. |
+| **Foil** | The image in mirrored silver foil. |
+| **Engraved** | The image etched into the surface, with the skin showing through. |
 
-- The initial selection is Fire single, paused at frame zero.
-- Choose a clip to pause at its first frame.
-- Play runs once and holds the last pose. Play again at the end restarts it.
-- Pause or drag the timeline to choose a precise frame. Scrubbing pauses playback.
-- Animation is available in studio and Hands views. The hands are hidden in studio views while the weapon keeps its original motion.
+Choose a size and how many (1 to 12, shared between the two sides), and **Move the stickers** for a new arrangement. One sticker sheet is shared by every model. Gold, Holo and Foil are also reflective: they catch the studio lights as you rotate the weapon, and that shine is included in the downloaded GLB as a roughness/metalness texture. The holographic colours are printed into the sticker rather than shifting with the viewing angle. On parts left in factory finish on the AKS-74U and the CS2 AK-47, stickers show their colour but not the extra shine, because those parts keep the model's own surface maps.
 
-## Make a skin
+### Customize parts
 
-1. Browse for images or drop them into the collection. Duplicate files are ignored.
-2. Choose Sparse, Balanced, or Layered collage density.
-3. Generate a new skin, or enter a seed and press Enter to reproduce a combination.
-4. Open Customize parts, or click the weapon, to restrict a part's image pool, regenerate only that part, restore its base finish, or lock it against further generation.
+Open **Customize parts** or click a part on the model. Every part starts on the shared design, so artwork flows across them. Per part you can:
 
-The animated model has **Metal Body, Magazines, and Wood Fittings** groups. The Classic model retains **Body, Barrel, Stock, Magazine, Grip, Foregrip, and Details**. Hands and ammunition are never painted. Lock an original finish if you want a part to stay unpainted.
+- switch to a **Solid colour** from the palette, or back to the **Factory finish**;
+- untick images to keep them off that part, or **Remix this part** for its own layout (**Rejoin shared design** undoes both);
+- **Lock** it: its artwork then stays exactly as it is, whatever you generate or change. (Edge wear is laid over the whole weapon, locked parts included.)
 
-Seeds reproduce results given the same image contents, density, image restrictions, and locked state. Each part has its own random stream. Image IDs are content hashes, so upload order does not change selection. Part remixes increment a local revision; global seed generation resets unlocked revisions. Density changes apply on generation.
+Parts are Metal Body, Magazines and Wood Fittings on the AKS-74U; Body, Barrel, Stock, Magazine, Grip, Foregrip and Details on the classic AK-47; a single Weapon part on the CS2 model; and Body, Barrel, Scope, Bolt & Magazine and Bipod on the AWP. Each model keeps its own parts and settings while the tab is open.
 
-Images stay in browser memory and are never sent to the server. Files must be at most 20 MB and 50 million pixels. Collage source images are proportionally scaled to a maximum dimension of 1200 pixels. Static JPG, PNG, and WebP are the intended inputs. Removing images updates unlocked artwork; locked parts retain their composed pixels until regenerated.
+### Views, hands and animation
 
-## Downloads
+Left, Angle and Right are orbit views (drag to rotate, scroll to zoom). **Hands** is a fixed first-person view, available on the AKS-74U and the classic AK-47. Under **Hands & animation** choose gloves (Hard-Knuckle, Black Hard-Knuckle, Fingerless, Full-Finger, or the model's Original Hands) and sleeves (Bare Arms, FBI, SAS, Balkan), pick a clip, and play or scrub to the pose you want. The AKS-74U has seven clips with fully animated arms. The classic AK-47 and the CS2 AK-47 share four Counter-Strike 2 clips (Idle, Draw, Reload, Fire). On the classic AK-47 the hands stay gripped to the weapon and move with it, but are not themselves animated: in a reload the magazine leaves and returns without a hand on it. The CS2 AK-47 has no arms. The AWP is a static model: no animation and no Hands view.
 
-- **Download render:** opaque 1920 x 1080 PNG from the current camera and animation frame. UI selection highlights are excluded. Playback freezes briefly for capture and then resumes if it was playing.
-- **Download texture:** 2048 x 2048 PNG of the same color atlas used by the preview. Hands, lighting, and selection highlights are excluded.
-- **Download GLB:** the customized selected model with the selected gloves and sleeves, even from a studio view. For the AKS-74U this includes the prepared color UVs, generated skin, skeleton, skin weights, and all seven native animation clips. CS2 hand motion is baked at 60 frames per second, including each clip's final frame. Original Hands exports the native arms instead. The original base pose is exported so partial weapon tracks keep the correct defaults; your editor pose and playback state are restored afterward.
+### Downloads
 
-The prepared AKS-74U atlas targets the **downloaded customized GLB**, not the unmodified source GLB or FBX. In another application, import that customized GLB to get the matching UV setup. Classic textures retain the original `assets/ak47.glb` UV layout. This app exports artwork and models; it does not install game skins or export video.
+- **Render**: 1920 × 1080 PNG of the current camera and pose.
+- **Texture**: the 2048 × 2048 colour atlas. For the AKS-74U it matches the downloaded GLB's prepared UVs, not the original source file; the other two keep their original UV layouts.
+- **GLB**: the model with your skin, the selected hands, its rig and its animation clips. CS2 hand motion is baked at 60 fps.
 
-CS2 texture downloads retain the supplied model's native UV layout. Its GLB download includes the customized material and the five exposed weapon clips, with no added hands. Original source clips unrelated to this preview, including M4A1 and additive clips, remain in your untouched original download.
+## Phone scene
 
-## UV and rendering implementation
+Switch tabs with **Phone scene** at the top. The view is first person: a rigged hand holds a phone in a small game-style world, and the phone shows a feed.
 
-The animated model's original metal UVs include repeated and out-of-range islands, and its wood UVs collapse to a single point. Its prepared color UV channel is separate from the original UVs used by normal and material-detail maps:
+### Your posts
 
-- Metal and magazines retain the periodic source layout in a padded 1536-pixel square of the atlas.
-- Alternate animated magazines retain the same color coordinates, so reloads show the same skin on both copies.
-- Wood uses six padded box-projected charts in the atlas's right-hand strip.
-- Small metal faces with collapsed UVs receive additional box charts in the unused upper strip.
+Drop screenshots of posts into **Your posts**. They are separate from the skin images. Each one is scaled to the width of the phone's screen and they are stacked, in the order you add them, into one endless feed: after the last post it starts again. The feed sits inside a generic social-app template (status bar with the real time, tabs, navigation bar) whose bars turn light or dark to match your first screenshot. With no screenshots the template shows stand-in posts.
 
-All position, normal, tangent, original UV, joint-index, and weight attributes are preserved together when splitting paint groups. Animation remains attached to the original skeleton and tracks.
+- **Post my weapon render** adds the weapon studio's current view as the first post.
+- **Shuffle the feed** reorders the posts; **Remove all posts** empties it.
+- **App bars · Off** hides the template's bars, for screenshots of a whole phone screen that already include them.
 
-Masks are derived from the paint UV triangles, with one zone owner per atlas pixel so other parts cannot overwrite locked artwork. Each model's preview and PNG export share a single atlas. The original materials retain their normal, roughness, metallic, and occlusion maps. Only their base color uses the new paint channel.
+### The scene
 
-The Classic model has no supplied finished base-color material, so it keeps the generated wood-and-metal starting finish introduced by AK Studio. Its separate POV grip reference has no textures and uses neutral skin/glove colors.
+| Setting | |
+| --- | --- |
+| **World** | Dust yard, Night range or Training hall. |
+| **How the phone is held** | Low right like a weapon viewmodel, or raised to read. |
+| **Frame** | Landscape 16:9 (1920 × 1080), Vertical 9:16 (1080 × 1920) or Portrait 4:5 (1080 × 1350). |
+| **Game overlay** | Crosshair, health and armour, round timer and radar. On or off. |
+
+**Generate a scene** picks the world and the hold from a seed; the same seed gives the same scene.
+
+### Using it live
+
+The view is always live. Scroll the mouse wheel or drag over it to move the feed: the thumb swipes the glass as it moves. Move the mouse to look around; the hand trails the view slightly. **Auto-scroll** flicks through the feed on its own at three paces. **Go full screen** fills the display (Space toggles auto-scroll, the arrow and Page keys scroll, Esc leaves). **Record video** captures the live view and saves a WebM when you stop.
+
+**Download PNG** saves the current moment at the frame's full size.
+
+## Limits
+
+Images must be under 20 MB and 50 megapixels; working copies are scaled to 1200 px on the long edge (2400 px for post screenshots). JPG, PNG and WebP are the intended formats. PNGs with transparency work well as stickers. The app needs WebGL 2 and must be served over HTTP (not opened as a file).
+
+## Project layout
+
+```
+index.html, styles.css
+src/
+  main.js               entry: tabs and the skin image collection
+  shared/               library.js (uploads), random.js (seeded randomness)
+  weapon/
+    app.js              controls and per-model workspaces
+    scene.js            viewport, views, hands, animation, exports
+    animated-model.js   AKS-74U preparation (paint groups, paint UVs)
+    cs2-weapon.js       CS2 AK-47 preparation
+    classic-rig.js      puts the classic AK-47's parts on the CS2 skeleton
+    awp.js              AWP parts and factory colours
+    hands.js, cs2-hands.js
+    skin/
+      generator.js      settings, parts, layout planning   (pure)
+      palette.js        palette extraction, colour matching (pure)
+      design.js         draws a layout as flat side-view artwork
+      stickers.js       draws the sticker pass (colour and shine)
+      sticker-effects.js  gold, foil, holo and engraving pixel maths (pure)
+      projector.js      projects that artwork onto the UV atlas (WebGL)
+      atlas.js          masks, base finish, per-part layers
+  phone/
+    app.js              posts, scene controls, live controls
+    generator.js        presets, seeded scenes, feed layout, scrolling (pure)
+    scene.js            the first-person view, world, live loop, exports
+    hand.js             the rigged hand: poses and finger reach
+    screen.js           draws the feed and the app template
+    hud.js              draws the game overlay
+assets/                 weapon, hand and phone models
+vendor/                 three.js 0.162 and loaders (MIT)
+scripts/                serve.mjs, build.mjs, extract-cs2-rig.mjs, convert-awp.mjs, prepare-cs2.py
+tests/                  node --test unit tests
+qa/                     optional Playwright browser checks
+```
+
+The two `generator.js` files, `palette.js` and `sticker-effects.js` have no DOM or WebGL dependencies, which is what the unit tests exercise.
 
 ## Checks and build
 
 ```
-npm test
-npm run build
+npm test          unit tests for layout planning, colour maths, and the phone's feed and scrolling
+npm run build     syntax and asset checks, then a static copy in dist/
 ```
 
-The build checks source syntax and GLB headers, then copies the self-contained static app into `dist/`. Serve that directory over HTTP; file:// is unsupported. Dependencies are vendored locally with their licenses.
-
-Optional browser checks require Python, Pillow, Playwright, and its Chromium browser. With the local server running:
+`qa/smoke.py` drives the real app in headless Chromium: every model, every layout and colour treatment, seeded repeatability, per-part editing and locks, the phone tab and every download. It needs Python with Playwright and Pillow, and the server running:
 
 ```
-python qa/animated_checks.py
-python qa/roundtrip_motion.py
-python qa/browser_checks.py
-python qa/hands_check.py
-python qa/multirig_checks.py
-python qa/multirig_failure_checks.py
-python qa/cs2_weapon_checks.py
+python qa/smoke.py
 ```
 
-`animated_checks.py` covers all clips, playback/scrubbing/restart, paint channels, model switching and workspace restoration, PNG dimensions, GLB re-import with its skin and material detail, and mobile layout. It creates `qa/customized-aks74u.glb`; `roundtrip_motion.py` compares sampled animated vertices from that file against the editor across all clips. `browser_checks.py` covers the Classic editor, seeded pixels, locks/overrides, invalid files, reset, camera controls, PNG re-import, and failure states. `hands_check.py` covers the Classic reference grip. QA captures and exports are excluded from the build.
+Add `?debug=1` to the URL to expose `window.akStudio` for inspection.
 
-`multirig_checks.py` checks the four glove styles and sleeve options on both models, Original Hands, unchanged gun artwork, PNG/GLB export, and re-imported motion across all seven clips. `multirig_failure_checks.py` checks failed asset loads, fallback hands, playback restoration during GLB export, and Classic Original Hands export.
+## Sources
 
-`cs2_weapon_checks.py` covers CS2 original-finish restoration, matte artwork, deterministic generation, unchanged UVs, all five clips, disabled hand controls, model workspaces, missing-model recovery, mobile layout, PNG/texture downloads, and sampled vertex motion after GLB re-import.
-
-Add `?debug=1` to expose the local `window.akStudio` inspection hook. Normal usage does not expose it.
-
-## Source and dependencies
-
-- `assets/aks74u.glb` is a copy of your `animated_aks-74u.glb`. Its matching FBX remains untouched in `animated-aks-74u/source/`.
-- `assets/ak47.glb` comes from your local skingen checkout. Original zone names and the mask-aware scoring approach are adapted from [skingen](https://github.com/swagd3v/skingen).
-- `assets/ak47-cs2.glb` is a copy of your `rifle__ak-47_ver.2_weapon_model_cs2.glb`: [RIFLE | AK-47 (Ver.2) Weapon Model (CS2)](https://sketchfab.com/3d-models/rifle-ak-47-ver2-weapon-model-cs2-019465e8ecfd43b687d963f7b0aadf81) by [6lucius](https://sketchfab.com/6lucius), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), according to its embedded metadata. AK Studio modifies color/materials when artwork is applied and exports five selected clips; it preserves the original geometry and UVs.
-- `assets/pov-grip.glb` is a copy of your static AK POV reference, used only by the Classic model.
-- `assets/cs2/` contains seven browser-ready presets prepared from your `CS2_MultiRig_V3.zip` from [CS2-MultiRig](https://github.com/goribby/CS2-MultiRig). To rebuild them, run `python scripts/prepare-cs2.py` from this directory. The ZIP and Blender project remain unchanged and are excluded from the static build. Color, normal, and packed material maps are retained; runtime roughness is adjusted for cloth and leather under the app's lighting.
-- Three.js 0.162.0, GLTFLoader, GLTFExporter, OrbitControls, and utility dependencies are vendored under `vendor/THREE-LICENSE.txt`.
+- `assets/aks74u.glb`: your animated AKS-74U.
+- `assets/ak47.glb`: from your skingen checkout; zone names follow [skingen](https://github.com/swagd3v/skingen).
+- `assets/ak47-cs2.glb`: [RIFLE | AK-47 (Ver.2) Weapon Model (CS2)](https://sketchfab.com/3d-models/rifle-ak-47-ver2-weapon-model-cs2-019465e8ecfd43b687d963f7b0aadf81) by [6lucius](https://sketchfab.com/6lucius), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The app changes its colour and material when painted and exports four of its clips. Its skeleton and those clips, copied into `assets/ak47-rig.json` by `npm run rig`, also animate the classic AK-47.
+- `assets/awp.glb`: converted from your `weapon_snip_awp.obj` with `npm run awp -- path/to/weapon_snip_awp.obj`, which welds the single OBJ object into its separate pieces and sorts them into the five parts. The OBJ has no texture, so the factory finish is flat colours.
+- `assets/pov-grip.glb`: your static AK first-person reference, used by the classic model's Original Hands.
+- `assets/cs2/`: glove and sleeve presets prepared from [CS2-MultiRig](https://github.com/goribby/CS2-MultiRig) with `scripts/prepare-cs2.py`.
+- `assets/phone/rigged-hand.glb`: [Rigged hand](https://sketchfab.com/3d-models/rigged-hand-eae97cc2a742413cb5338ab942b12c1e) by [Elena FF](https://sketchfab.com/elenaferfor), [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/), unmodified. The app poses it from its Open/Close clip.
+- `assets/phone/phone.glb`: your UV-mapped phone. `assets/phone/hand.glb`, the earlier CS:GO hand, is no longer used.
+- `vendor/`: Three.js 0.162.0 with its loaders, exporter and controls, under `vendor/THREE-LICENSE.txt`.
 
 Model rights remain with their original authors.
